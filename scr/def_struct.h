@@ -20,8 +20,31 @@ typedef struct
     double Snowfall;
     double Melt;
     double Snowpack;
+    double Snowpack_ice;
+    double Snowpack_liquid;
+    double Eact;
+    double S_SOIL;
+    double I;
     
 } ST_VAR_HBV;
+
+typedef struct 
+{
+    double P_TT;
+    double P_SFCF;
+    double P_CFMAX;
+    double P_CWH;
+    double P_CFR;
+    double P_FC;
+    double P_LP;
+    double P_PERC;
+    double P_BETA;
+    double P_K0;
+    double P_K1;
+    double P_K2;
+    double P_MAXBAS;
+    
+} ST_PARA;
 
 
 typedef struct

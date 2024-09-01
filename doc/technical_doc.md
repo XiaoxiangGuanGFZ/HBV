@@ -59,7 +59,7 @@ Thus the snow routine of the HBV model has primarily three free parameters that 
 The soil moisture accounting routine computes an index of the wetness of the entire basin and integrates interception and soil moisture storage. 
 
 Based on the amount of input to the soil (sum of rainfall and
-snowmelt) at a certain time step, $I(t)$ (mm/d), the flux to the groundwater, $F(t)$ (mm/d), is computed. The remaining part of $P{t}$ is added to the soil box. The partition is a function of the ratio between current water content of the
+snowmelt) at a certain time step, $I(t)$ (mm/d), the flux to the groundwater, $F(t)$ (mm/d), is computed. The remaining part of $P(t)$ is added to the soil box. The partition is a function of the ratio between current water content of the
 soil box ($S_{SOIL}(t)$, mm) and its maximum value ($P_{FC}$, mm). 
 
 The actual evaporation from the soil box equals the potential evaporation if $S_{SOIL}(t) / P_{FC}$ is above $P_{LP} / {P_{FC}}$, while a linear reduction is uded when $S_{SOIL}(t) / P_{FC}$ is below the value.
