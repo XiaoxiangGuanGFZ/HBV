@@ -1,0 +1,27 @@
+# program parameter file
+# field-value pairs, separated by comma
+# contents after # are comments
+
+# the file base and name to the data file
+FP_DATA,D:/HBV/data/example_data.csv
+
+# the file base and name the simulated output file
+FP_OUT,D:/HBV/data/sim.csv
+
+# the HBV parameters either a parameter file or a sequence of values in order:
+# 1. parameter file, used for temporally dynamic parameterization [HBV_PARA_flag == file]
+# HBV_PARA,D:/HBV/data/example_para.csv
+# 2. parameter sequence, for temporally constant parameterization [HBV_PARA_flag == homo]
+# HBV_PARA,0.01,0.25,0.1,0.01,10,0.2,10.2
+HBV_PARA_flag,homo
+HBV_PARA,0.01,0.25,0.1,0.01,10,0.2,10.2
+
+# the simulation steps
+CALC_N,5310
+
+# flag, whether there is observed runoff in the data file
+FLAG_Qobs,TRUE
+
+# flag, whether or not to print the necessary info to the screen
+FLAG_Mute,TRUE
+

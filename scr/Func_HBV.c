@@ -3,6 +3,8 @@
 #include "def_struct.h"
 #include "Func_HBV.h"
 #include "Func_Snow.h"
+#include "Func_Soil.h"
+#include "Func_Routing.h"
 
 void HBV(
     ST_VAR_IN *p_vars_in,
@@ -11,19 +13,32 @@ void HBV(
     int len
 )
 {
-
     // initial state
-    (p_vars_HBV + 0)->Snowpack = 0.0;
-    (p_vars_HBV + 0)->Snowpack_ice = 0.0;
-    (p_vars_HBV + 0)->Snowpack_liquid = 0.0;
-    (p_vars_HBV + 0)->S_SOIL = 0.3 * p_para->P_FC;
-
-    // define temporary variables
-    double Melt_tmp;
-    double Refreeze_tmp;
+    double pre_Snowpack, pre_Snowpack_liquid, pre_Snowpack_ice;
+    double pre_S_SOIL;
+    double flux_GW, flux_Soil;
+    double pre_S_UZ, pre_S_LZ;
 
     for (int i = 0; i < len; i++)
     {
+        if (i == 0)
+        {
+            /* code */
+            pre_Snowpack = 0.0;
+            pre_Snowpack_liquid = 0.0;
+            pre_Snowpack_ice = 0.0;
+            pre_S_SOIL = 0.3 * p_para->P_FC;
+            pre_S_UZ = 5;
+            pre_S_LZ = 5;
+        } else {
+            pre_Snowpack = (p_vars_HBV + i - 1)->Snowpack;
+            pre_Snowpack_liquid = (p_vars_HBV + i - 1)->Snowpack_liquid;
+            pre_Snowpack_ice = (p_vars_HBV + i - 1)->Snowpack_ice;
+            pre_S_SOIL = (p_vars_HBV + i - 1)->S_SOIL;
+            pre_S_UZ = (p_vars_HBV + i - 1)->S_UZ;
+            pre_S_LZ = (p_vars_HBV + i - 1)->S_LZ;
+        }
+        
         /**************
          * snow routine
          * ************/
@@ -34,6 +49,48 @@ void HBV(
             p_para->P_SFCF,
             &((p_vars_HBV + i)->Rainfall),
             &((p_vars_HBV + i)->Snowfall));
-        
+        Routine_snow(
+            (p_vars_in + i)->Tair,
+            (p_vars_HBV + i)->Rainfall,
+            (p_vars_HBV + i)->Snowfall,
+            pre_Snowpack,
+            pre_Snowpack_ice,
+            pre_Snowpack_liquid,
+            &((p_vars_HBV + i)->Snowpack),
+            &((p_vars_HBV + i)->Snowpack_ice),
+            &((p_vars_HBV + i)->Snowpack_liquid),
+            &((p_vars_HBV + i)->Melt),
+            &((p_vars_HBV + i)->Refreeze),
+            &((p_vars_HBV + i)->I),
+            p_para->P_TT,
+            p_para->P_CFMAX,
+            p_para->P_CFR,
+            p_para->P_CWH);
+        Routine_soil(
+            pre_S_SOIL,
+            (p_vars_in + i)->Epot,
+            (p_vars_HBV + i)->I,
+            &((p_vars_HBV + i)->Eact),
+            &((p_vars_HBV + i)->S_SOIL),
+            &flux_GW,
+            &flux_Soil,
+            p_para->P_BETA,
+            p_para->P_FC,
+            p_para->P_LP);
+        Routine_groundwater(
+            flux_GW,
+            pre_S_UZ,
+            pre_S_LZ,
+            &((p_vars_HBV + i)->S_UZ),
+            &((p_vars_HBV + i)->S_LZ),
+            &((p_vars_HBV + i)->QGW),
+            &((p_vars_HBV + i)->QGW0),
+            &((p_vars_HBV + i)->QGW1),
+            &((p_vars_HBV + i)->QGW2),
+            p_para->P_K0,
+            p_para->P_K2,
+            p_para->P_K2,
+            p_para->P_UZL,
+            p_para->P_PERC);
     }
 }

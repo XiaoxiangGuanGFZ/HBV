@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "func_soil.h": "c"
+        "func_soil.h": "c",
+        "func_routing.h": "c",
+        "func_hbv.h": "c",
+        "func_dataio.h": "c"
     }
 }
