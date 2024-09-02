@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "def_struct.h"
 #include "Func_dataIO.h"
 
-#define MAXCHAR 500
+#define MAXCHAR 1000
 
 void import_global(
     char fname[], ST_GP *p_gp)

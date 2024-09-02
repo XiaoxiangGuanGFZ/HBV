@@ -9,7 +9,7 @@
 #include "Func_OutPrint.h"
 #include "Func_HBV.h"
 #include "Func_Routing.h"
-
+#include "Func_Metric.h"
 
 int flag_obs;
 int flag_mute;
