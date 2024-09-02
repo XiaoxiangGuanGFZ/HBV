@@ -12,9 +12,9 @@ FP_OUT,D:/HBV/data/sim.csv
 # 1. parameter file, used for temporally dynamic parameterization [HBV_PARA_flag == file]
 # HBV_PARA,D:/HBV/data/example_para.csv
 # 2. parameter sequence, for temporally constant parameterization [HBV_PARA_flag == homo]
-# HBV_PARA,0.01,0.25,0.1,0.01,10,0.2,10.2
+# HBV_PARA,P_TT;P_CFMAX;P_SFCF;P_CFR;P_CWH;P_FC;P_LP;P_BETA;P_K0;P_K1;P_K2;P_UZL;P_PERC;P_MAXBAS
 HBV_PARA_flag,homo
-HBV_PARA,0.01,0.25,0.1,0.01,10,0.2,10.2
+HBV_PARA,-1;5;0.9;0.05;0.08;200;0.5;4;0.5;0.005;0.002;50;1.5;4
 
 # the simulation steps
 CALC_N,5310
@@ -23,5 +23,5 @@ CALC_N,5310
 FLAG_Qobs,TRUE
 
 # flag, whether or not to print the necessary info to the screen
-FLAG_Mute,TRUE
+FLAG_Mute,FALSE
 

@@ -92,6 +92,25 @@ $$
 c(i) = \int_{i-1}^{i}{2/P_{MAXBAS} - 4 / P_{MAXBAS}^2 \cdot |u - P_{MAXBAS} / 2| \, du}
 $$
 
+### Parameters
+
+| parameter | name | explanation  |     range    |
+| --------- | -----| ----------- | ------------ |
+| P_TT | Threshold Temperature | The temperature at which precipitation changes between rain and snow. | -2°C to 2°C|
+| P_CFMAX | Degree-Day Factor | Controls the rate of snowmelt per degree-day. | 1 to 10 mm/°C/day|
+| P_SFCF | Snowfall Correction Factor | Adjusts the amount of snowfall. | 0.5 to 2.0 |
+| P_CFR  | Refreezing Coefficient | Fraction of melted snow that refreezes. |  0 to 0.1 |
+| P_CWH  | Water Holding Capacity | Maximum fraction of snow that can be liquid water. | 0.01 to 0.1 |
+| P_FC | Field Capacity | Maximum soil moisture storage |  50 to 500 mm |
+| P_LP | Wilting Point or Limit for Potential Evapotranspiration | Fraction of FC at which potential evapotranspiration is reduced. | 0.3 to 1.0 |
+| P_BETA | Shape Parameter for Runoff Generation | Controls the nonlinearity of runoff generation from the soil moisture zone. | 1 to 6 |
+| P_K0 | Upper Zone Quick Flow Recession Coefficient | Controls the speed of quick flow from the upper zone when storage exceeds a certain threshold. | 0.1 to 1.0 per day |
+| P_K1 | Upper Zone Recession Coefficient | Controls the speed of runoff from the upper zone. | 0.01 to 0.5 per day |
+| P_K2 | Lower Zone Recession Coefficient | Controls the speed of runoff from the lower zone. | 0.001 to 0.1 per day |
+| P_UZL | Threshold for Quick Flow in Upper Zone | Threshold level in the upper zone before quick flow occurs. | 0 to 100 mm |
+| P_PERC | Percolation from Upper to Lower Zone | Maximum percolation rate from the upper zone to the lower zone. | 0 to 3 mm/day |
+| P_MAXBAS | Routing or Response Function | Describes the shape of the unit hydrograph, influencing the timing of runoff. | 1 to 7 days |
+
 ### Others
 
 The long-term mean values of the potential evaporation, $E_{POT,M}(t)$, for a certain day of the year are corrected to its value at day $t$, $E_{POT}(t)$, by using the deviations of the temperature, $T(t)$, at a certain day, from its long-term mean, $T_{M}$, and a correction factor, $P_{CET}$ (C−1).

@@ -3,6 +3,7 @@
         "func_soil.h": "c",
         "func_routing.h": "c",
         "func_hbv.h": "c",
-        "func_dataio.h": "c"
+        "func_dataio.h": "c",
+        "func_para.h": "c"
     }
 }

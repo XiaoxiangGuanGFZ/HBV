@@ -13,6 +13,7 @@ set(SOURCE_FILES
     Func_OutPrint.c
     Func_HBV.c
     Func_Metric.c
+    Func_Para.c
 )
 
 

@@ -143,10 +143,8 @@ void import_data(
     char *token;
     char row[MAXCHAR];
     char row_first[MAXCHAR];
-    int i;
-    i = 0; // record the number of rows in the data file
+    int i = 0; // record the number of rows in the data file
     fgets(row_first, MAXCHAR, fp); // skip the first row
-    
     while (fgets(row, MAXCHAR, fp) != NULL && i < CALC_N)
     {
         (ts_date + i)->y = atoi(strtok(row, ",")); 

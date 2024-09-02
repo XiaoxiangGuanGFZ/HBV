@@ -10,6 +10,7 @@
 #include "Func_HBV.h"
 #include "Func_Routing.h"
 #include "Func_Metric.h"
+#include "Func_Para.h"
 
 int flag_obs;
 int flag_mute;
@@ -19,6 +20,7 @@ int main(int argc, char * argv[])
 {
     ST_GP GP;
     import_global(*(++argv), &GP);
+    
     flag_obs = 0;
     flag_mute = 0;
     flag_homo = 0;
@@ -35,6 +37,8 @@ int main(int argc, char * argv[])
         flag_homo = 1;
     }
     
+    if (flag_mute == 0) {print_global(&GP);}
+    
     /*********************
      * data and variables preparation
      * *******************/
@@ -49,7 +53,17 @@ int main(int argc, char * argv[])
     p_vars_HBV = (ST_VAR_HBV *)malloc(sizeof(ST_VAR_HBV) * len);
     p_vars_in = (ST_VAR_IN *)malloc(sizeof(ST_VAR_IN) * len);
     p_para = (ST_PARA *)malloc(sizeof(ST_PARA) * 1);
-    ts_date = (ST_DATE *)malloc(sizeof(ST_DATE) * 1);
+    ts_date = (ST_DATE *)malloc(sizeof(ST_DATE) * len);
+    
+    import_data(GP.FP_DATA, len, ts_date, p_vars_in);
+    if (flag_mute == 0) {preview_data(ts_date, p_vars_in, len);}
+    
+    if (flag_homo == 1)
+    {
+        extract_parameters(GP.HBV_PARA, p_para);
+        if (flag_mute == 0) {print_para_homo(p_para);}
+    }
+    
     /*********************
      * unit hydrograph generation: triangle weight
      * *******************/ 
@@ -59,7 +73,8 @@ int main(int argc, char * argv[])
         p_para->P_MAXBAS,
         &UH,
         &P_MAXBAS_int);
-
+    if (flag_mute == 0) {print_UH(UH, P_MAXBAS_int);}
+    
     /*********************
      * HBV simulation
      * *******************/
@@ -67,7 +82,7 @@ int main(int argc, char * argv[])
         p_vars_HBV,
         p_para,
         len);
-
+    
     /*********************
      * routing
      * *******************/
@@ -116,7 +131,7 @@ int main(int argc, char * argv[])
             &nse, &R2, &RMSE, &Re);
         if (flag_mute == 0)
         {
-            printf("----------- Metrics (obs vs. sim): \n");
+            printf("----------- Metrics (obs vs. sim) \n");
             printf("%-4s:%6.3f\n%-4s:%6.3f\n%-4s:%6.3f\n%-4s:%6.2f%%\n",
                 "NSE", nse,
                 "R2", R2,

@@ -46,20 +46,19 @@ typedef struct
 typedef struct 
 {
     double P_TT;
-    double P_SFCF;
     double P_CFMAX;
-    double P_CWH;
+    double P_SFCF;
     double P_CFR;
+    double P_CWH;
     double P_FC;
     double P_LP;
-    double P_PERC;
     double P_BETA;
     double P_K0;
     double P_K1;
     double P_K2;
     double P_UZL;
+    double P_PERC;
     double P_MAXBAS;
-    
 } ST_PARA;
 
 
