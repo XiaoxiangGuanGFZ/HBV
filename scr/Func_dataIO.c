@@ -230,4 +230,50 @@ void Write_HBV_sim2csv(
 }
 
 
+void read_HBVpara(
+    char FP_PARA[],
+    int CALC_N,
+    ST_PARA *p_para)
+{
+    FILE *fp;
+    if ((fp = fopen(FP_PARA, "r")) == NULL)
+    {
+        printf("Cannot open parameter file: %s\n", FP_PARA);
+        exit(1);
+    }
+    char *token;
+    char row[MAXCHAR];
+    char row_first[MAXCHAR];
+    int i;
+    i = 0; // record the number of rows in the data file
+    fgets(row_first, MAXCHAR, fp); // skip the first row
+    
+    while (fgets(row, MAXCHAR, fp) != NULL && i < CALC_N)
+    {
+        (p_para + i)->P_TT = atof(strtok(row, ","));
+        (p_para + i)->P_CFMAX = atof(strtok(NULL, ","));
+        (p_para + i)->P_SFCF = atof(strtok(NULL, ","));
+        (p_para + i)->P_CFR = atof(strtok(NULL, ","));
+        (p_para + i)->P_CWH = atof(strtok(NULL, ","));
+        (p_para + i)->P_FC = atof(strtok(NULL, ","));
+        (p_para + i)->P_LP = atof(strtok(NULL, ","));
+        (p_para + i)->P_BETA = atof(strtok(NULL, ","));
+        (p_para + i)->P_K0 = atof(strtok(NULL, ","));
+        (p_para + i)->P_K1 = atof(strtok(NULL, ","));
+        (p_para + i)->P_K2 = atof(strtok(NULL, ","));
+        (p_para + i)->P_UZL = atof(strtok(NULL, ","));
+        (p_para + i)->P_PERC = atof(strtok(NULL, ","));
+        (p_para + i)->P_MAXBAS = atof(strtok(NULL, ","));
+        
+        i++;
+    }
+    fclose(fp);
+    if (i != CALC_N)
+    {
+        printf("conflict numbers of lines in parameter file: %s\n", FP_PARA);
+        exit(1);
+    }
+    
+}
+
 

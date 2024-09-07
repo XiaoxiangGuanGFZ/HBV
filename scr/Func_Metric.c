@@ -9,12 +9,14 @@ void Metrics(
     double *nse,
     double *R2,
     double *RMSE,
+    double *MSE,
     double *Re
 )
 {
     *nse = NSE(sim, obs, counts);
     *R2 = R_squared(sim, obs, counts);
     *RMSE = RootMeanSquareError(sim, obs, counts);
+    *MSE = MeanSquaredError(sim, obs, counts);
     *Re = RelativeError(sim, obs, counts);
 }
 
@@ -47,6 +49,19 @@ double RootMeanSquareError(double *sim, double *obs, int counts) {
 
     return sqrt(sum_sq_diff / counts);
 }
+
+
+double MeanSquaredError(double *sim, double *obs, int counts) {
+    double sum_sq_diff = 0.0;
+
+    for (int i = 0; i < counts; i++) {
+        double diff = sim[i] - obs[i];
+        sum_sq_diff += diff * diff;
+    }
+
+    return sum_sq_diff / counts;
+}
+
 
 double RelativeError(double *sim, double *obs, int counts) {
     double sum_abs_diff = 0.0;

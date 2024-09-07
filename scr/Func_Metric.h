@@ -6,12 +6,15 @@ void Metrics(
     double *nse,
     double *R2,
     double *RMSE,
+    double *MSE,
     double *Re
 );
 
 double NSE(double *sim, double *obs, int counts);
 
 double RootMeanSquareError(double *sim, double *obs, int counts);
+
+double MeanSquaredError(double *sim, double *obs, int counts);
 
 double RelativeError(double *sim, double *obs, int counts);
 

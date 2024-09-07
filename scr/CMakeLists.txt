@@ -14,6 +14,7 @@ set(SOURCE_FILES
     Func_HBV.c
     Func_Metric.c
     Func_Para.c
+    Func_HBV_DynamicPara.c
 )
 
 

@@ -96,3 +96,25 @@ void print_para_homo(
            "PERC", p_para->P_PERC,
            "MAXBAS", p_para->P_MAXBAS);
 }
+
+void print_para_dynamic(
+    int CALC_N,
+    ST_PARA *p_para
+)
+{
+    printf("----------- HBV parameters: the first 6 rows \n");
+
+    printf("%6s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s %6s\n",
+           "TT", "CFMAX", "SFCF", "CFR", "CWH", "FC", "LP", "BETA", 
+           "K0", "K1", "K2", "UZL", "PERC", "MAXBAS");
+    for (size_t i = 0; i < 6; i++)
+    {
+        printf("%6.2f %6.3f %6.3f %6.3f %6.3f %6.2f %6.3f %6.2f %6.3f %6.3f %6.5f %6.3f %6.3f %6.3f\n",
+               (p_para + i)->P_TT, (p_para + i)->P_CFMAX, (p_para + i)->P_SFCF, 
+               (p_para + i)->P_CFR, (p_para + i)->P_CWH, (p_para + i)->P_FC,
+               (p_para + i)->P_LP, (p_para + i)->P_BETA, 
+               (p_para + i)->P_K0, (p_para + i)->P_K1, (p_para + i)->P_K2,
+               (p_para + i)->P_UZL, (p_para + i)->P_PERC, (p_para + i)->P_MAXBAS);
+    }
+    printf("...\n");
+}

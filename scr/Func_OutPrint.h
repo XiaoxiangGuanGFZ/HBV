@@ -21,4 +21,10 @@ void preview_data(
 void print_para_homo(
     ST_PARA *p_para);
 
+void print_para_dynamic(
+    int CALC_N,
+    ST_PARA *p_para
+);
+
+
 #endif

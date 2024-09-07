@@ -24,5 +24,9 @@ void Write_HBV_sim2csv(
     double *Qsim,
     int CALC_N);
 
+void read_HBVpara(
+    char FP_PARA[],
+    int CALC_N,
+    ST_PARA *p_Paras);
 
 #endif

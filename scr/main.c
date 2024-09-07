@@ -11,6 +11,7 @@
 #include "Func_Routing.h"
 #include "Func_Metric.h"
 #include "Func_Para.h"
+#include "Func_HBV_DynamicPara.h"
 
 int flag_obs;
 int flag_mute;
@@ -52,25 +53,40 @@ int main(int argc, char * argv[])
 
     p_vars_HBV = (ST_VAR_HBV *)malloc(sizeof(ST_VAR_HBV) * len);
     p_vars_in = (ST_VAR_IN *)malloc(sizeof(ST_VAR_IN) * len);
-    p_para = (ST_PARA *)malloc(sizeof(ST_PARA) * 1);
     ts_date = (ST_DATE *)malloc(sizeof(ST_DATE) * len);
-    
     import_data(GP.FP_DATA, len, ts_date, p_vars_in);
     if (flag_mute == 0) {preview_data(ts_date, p_vars_in, len);}
-    
+
     if (flag_homo == 1)
     {
+        // static parameterization:
+        // parameters are extracted from one field-value pair in the GP.txt file
+        p_para = (ST_PARA *)malloc(sizeof(ST_PARA) * 1);
         extract_parameters(GP.HBV_PARA, p_para);
         if (flag_mute == 0) {print_para_homo(p_para);}
+    } else {
+        // dynamic parameterization: parameters in a separate file
+        p_para = (ST_PARA *)malloc(sizeof(ST_PARA) * len);
+        read_HBVpara(
+            GP.HBV_PARA,
+            len,
+            p_para);
+        if (flag_mute == 0) {print_para_dynamic(len, p_para);}
     }
+    
     
     /*********************
      * unit hydrograph generation: triangle weight
      * *******************/ 
+    /****
+     * attention:
+     * the program assumes the UH can only be static, even though flag_homo == 1;
+     * when flag_homo == 1, only the first P_MAXBAS value in dynamic parameter file is used.
+     */
     double *UH;
     int P_MAXBAS_int;
     UH_triangle_generate(
-        p_para->P_MAXBAS,
+        (p_para + 0)->P_MAXBAS,
         &UH,
         &P_MAXBAS_int);
     if (flag_mute == 0) {print_UH(UH, P_MAXBAS_int);}
@@ -78,10 +94,19 @@ int main(int argc, char * argv[])
     /*********************
      * HBV simulation
      * *******************/
-    HBV(p_vars_in,
-        p_vars_HBV,
-        p_para,
-        len);
+    if (flag_homo == 1)
+    {
+        /* static parameters */
+        HBV(p_vars_in,
+            p_vars_HBV,
+            p_para,
+            len);
+    } else {
+        HBV_DynamicPara(p_vars_in,
+                        p_vars_HBV,
+                        p_para,
+                        len);
+    }
     
     /*********************
      * routing
@@ -113,9 +138,13 @@ int main(int argc, char * argv[])
     }
 
     /*********************
-     * metric calculation: NSE, R2, RMSE, Re (%)
+     * metric calculation: NSE, R2, RMSE, MSE, Re (%)
      * *******************/
-    double nse = 0.0;
+    double nse = -99.9;
+    double MSE = 99.9;
+    double RMSE = 99.9;
+    double R2 = 0.0;
+    double Re = -99.9;
     if (flag_obs == 1)
     {
         double *Qobs;
@@ -125,17 +154,17 @@ int main(int argc, char * argv[])
             *(Qobs + i) = (p_vars_in + i)->Qobs;
         }
 
-        double RMSE, R2, Re;
         Metrics(
             Qsim, Qobs, len,
-            &nse, &R2, &RMSE, &Re);
+            &nse, &R2, &RMSE, &MSE, &Re);
         if (flag_mute == 0)
         {
             printf("----------- Metrics (obs vs. sim) \n");
-            printf("%-4s:%6.3f\n%-4s:%6.3f\n%-4s:%6.3f\n%-4s:%6.2f%%\n",
+            printf("%-4s:%6.3f\n%-4s:%6.3f\n%-4s:%6.3f\n%-4s:%6.3f\n%-4s:%6.2f%%\n",
                 "NSE", nse,
                 "R2", R2,
                 "RMSE", RMSE,
+                "MSE", MSE,
                 "Re", Re * 100
             );
         }
