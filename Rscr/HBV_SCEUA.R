@@ -14,10 +14,10 @@ source("D:/HBV/Rscr/metrics.R")
 ws <- "D:/HBV/"
 fp_HBV <<- paste0(ws, "scr/build/HBV.exe ")  # the PML c program
 fp_gp <<- paste0(ws, "data/gp_SCEUA.txt")   # the PML.exe program configure file
-fp_data <- paste0(ws, "data/example_data.csv")  # the weather variable data file
+fp_data <- paste0(ws, "data/example_data_Chitan.csv")  # the weather variable data file
 fp_out <- paste0(ws, "data/example_sim.csv") # the output file 
 # fp_para <<- paste0(ws, "data/PMLpara_AU-Whr.csv") # the PML parameter file
-CALC_N <<- 5310     # the number of lines (observations) in data file, excluding the header line
+CALC_N <<- 12784     # the number of lines (observations) in data file, excluding the header line
 
 
 para_initial <<- c(0.0,   5,  1.0,  0.02, 0.05, 100, 0.5,   3, 0.5,  0.1,  0.05,  10,  1,  3)
@@ -61,7 +61,7 @@ fit = function(x) {
 # define the PML V2 parameter ranges --------
 #                 TT,CFMAX,SFCF,   CFR,  CWH,  FC,  LP,BETA,  K0,   K1,   K2,  UZL,PERC,MAXBAS
 para_lower =   c( -2,   1,  0.5,     0, 0.01,  50, 0.3,   1, 0.1, 0.01, 0.001,   0,  0,  1)
-para_upper =   c(  2,  10,  2.0,   0.1,  0.1, 500, 1.0,   6, 1.0,  0.5,  0.10, 100,  3,  7)
+para_upper =   c(  2,  10,  2.0,   0.1,  0.1, 900, 1.0,   6, 1.0,  0.5,  0.10, 100,  3,  7)
 para_initial = c(0.0,   5,  1.0,  0.02, 0.05, 100, 0.5,   3, 0.5,  0.1,  0.05,  10,  1,  3)
 
 # optimizing 

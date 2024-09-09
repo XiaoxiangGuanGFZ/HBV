@@ -160,7 +160,7 @@ void import_data(
         i++;
     }
     fclose(fp);
-    if (i != CALC_N)
+    if (i > CALC_N)
     {
         printf("conflict numbers of lines in data file: %s\n", FP_DATA);
         exit(1);
@@ -268,7 +268,7 @@ void read_HBVpara(
         i++;
     }
     fclose(fp);
-    if (i != CALC_N)
+    if (i > CALC_N)
     {
         printf("conflict numbers of lines in parameter file: %s\n", FP_PARA);
         exit(1);
