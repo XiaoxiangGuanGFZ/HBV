@@ -78,3 +78,5 @@ docs/
 *.temp
 .DS_Store
 Thumbs.db
+
+/references/
