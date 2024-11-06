@@ -19,7 +19,6 @@ fp_out <- paste0(ws, "data/example_sim.csv") # the output file
 # fp_para <<- paste0(ws, "data/PMLpara_AU-Whr.csv") # the PML parameter file
 CALC_N <<- 12784     # the number of lines (observations) in data file, excluding the header line
 
-
 para_initial <<- c(0.0,   5,  1.0,  0.02, 0.05, 100, 0.5,   3, 0.5,  0.1,  0.05,  10,  1,  3)
 para_str = paste(para_initial, collapse = ";")
 # ------- 
