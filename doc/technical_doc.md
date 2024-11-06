@@ -28,7 +28,7 @@ P_{rain} = P, T_{air} > P_{TT}
 $$
 
 $$
-P_{snow} = P \cdot P_{SFCF}, T_{air} <= P_{TT}
+P_{snow} = P \cdot P_{SFCF}, T_{air} \leq P_{TT}
 $$
 
 
@@ -43,7 +43,7 @@ $$
 where:
 
 - $M$: snowmelt (mm/day)
-- $P_{CFMAX}$: degree-day factor ($mm / (^{\circ}C \cdot day)$)
+- $P_{CFMAX}$: degree-day factor (mm/C/day)
 - $P_{TT}$: threshold temperature ($^{\circ}C$)
 
 Meltwater and rainfall (liquid state) are retained within the snowpack until they exceed a certain fraction, $P_{CWH}$ (–), of the water equivalent of the snow, which is usually preset to 10 %. When temperatures drop below $P_{TT}$, the amount of refreezing liquid water within the snowpack, $R$ (mm/d), is computed using a refreezing coefficient, $P_{CFR}$ (–)
@@ -127,7 +127,7 @@ $$
 but make sure:
 
 $$
-0<= E_{POT}(t) <= 2 E_{POT,M}
+0 \leq E_{POT}(t) \leq 2 E_{POT,M}
 $$
 
 
