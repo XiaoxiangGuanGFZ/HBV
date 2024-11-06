@@ -16,6 +16,8 @@ of water storage. Finally, in the routing routine a triangular
 weighting function is used to simulate the routing of the
 runoff to the catchment outlet.
 
+![HBV_structure](./structure_HBV.png)
+
 ### Snow routine
 
 The snow routine of the model controls snow accumulation and melt and works separately for each elevation and vegetation zone. Precipitation is considered to be either snow or rain, depending on whether the temperature is above
