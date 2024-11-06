@@ -44,7 +44,7 @@ where:
 - $P_{CFMAX}$: degree-day factor ($mm / (^{\circ}C \cdot day)$)
 - $P_{TT}$: threshold temperature ($^{\circ}C$)
 
-Meltwater and rainfall (liquid state) are retained within the snowpack until they exceed a certain fraction, $P_{CWH}$ (–), of the water equivalent of the snow, which is usually preset to 10 %. When temperatures drop below $P_{TT}$, the amount of refreezing liquid water within the snowpack, R (mm d−1), is computed using a refreezing coefficient, $P_{CFR}$ (–)
+Meltwater and rainfall (liquid state) are retained within the snowpack until they exceed a certain fraction, $P_{CWH}$ (–), of the water equivalent of the snow, which is usually preset to 10 %. When temperatures drop below $P_{TT}$, the amount of refreezing liquid water within the snowpack, $R$ (mm/d), is computed using a refreezing coefficient, $P_{CFR}$ (–)
 
 $$
 R = P_{CFR} \cdot P_{CFMAX} \cdot (P_{TT} - T(t))
@@ -62,7 +62,7 @@ Based on the amount of input to the soil (sum of rainfall and
 snowmelt) at a certain time step, $I(t)$ (mm/d), the flux to the groundwater, $F(t)$ (mm/d), is computed. The remaining part of $P(t)$ is added to the soil box. The partition is a function of the ratio between current water content of the
 soil box ($S_{SOIL}(t)$, mm) and its maximum value ($P_{FC}$, mm). 
 
-The actual evaporation from the soil box equals the potential evaporation if $S_{SOIL}(t) / P_{FC}$ is above $P_{LP} / {P_{FC}}$, while a linear reduction is uded when $S_{SOIL}(t) / P_{FC}$ is below the value.
+The actual evaporation $E_{act}$ from the soil box equals the potential evaporation ($E_{pot}$) if $S_{SOIL}(t) / P_{FC}$ is above $P_{LP} / {P_{FC}}$, while a linear reduction is used when $S_{SOIL}(t) / P_{FC}$ is below the value.
 
 $$
 F(t) / I(t) = (S_{SOIL}(t) / P_{FC}) ^{P_{BETA}}
@@ -73,10 +73,13 @@ $$
 E_{act} = E_{pot} \cdot \min(S_{SOIL}(t) / (P_{FC} \cdot P_{LP}), 1)
 $$
 
+
+### Runoff generation and routing
+
 Groundwater recharge is added to the upper groundwater box ($Z_{SU}$, mm). 
 $P_{PERC}$ (mm/d) defines the maximum percolation rate from the upper to the lower groundwater box ($S_{LZ}$, mm). 
 
-Runoff from the groundwater boxes is computed as the sum of two or three linear outflow equations $P_{K0}$,$P_{K1}$ and $P_{K2}$ (d−1), depending on whether $Z_{SU}$ is above a threshold value, $P_{UZL}$ (mm). This runoff is finally transformed by a triangular weighting function defined by the parameter $P_{MAXBAS}$ to give the simulated runoff (mm/d).
+Runoff from the groundwater boxes is computed as the sum of two or three linear outflow equations $P_{K0}$,$P_{K1}$ and $P_{K2}$ ($d^{−1}$), depending on whether $Z_{SU}$ is above a threshold value, $P_{UZL}$ (mm). This runoff is finally transformed by a triangular weighting function defined by the parameter $P_{MAXBAS}$ to give the simulated runoff (mm/d).
 
 $$
 Q_{GW}(t) = P_{K2} \cdot S_{LZ} + P_{K1} \cdot S_{UZ} + P_{K0} \cdot \max(S_{UZ} - P_{UZL}, 0)
