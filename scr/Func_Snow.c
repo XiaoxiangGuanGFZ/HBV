@@ -1,6 +1,4 @@
 
-
-
 #include <stdio.h>
 #include "Func_Snow.h"
 
@@ -17,6 +15,15 @@ void prec_partition(
     /***************
      * rainfall and snowfall partition,
      * based just on air temperature
+     * -- inputs:
+     * Prec: total precipitation, mm/d
+     * Tair: (daily average) air temperature, degree C
+     * -- parameters: 
+     * P_TT: a threshold temperature, degree C. 
+     * P_SFCF: To account for undercatch of snow precipitation and winter evaporation, 
+     *  which is little known, 
+     *  snow accumulation is adjusted by a free parameter, P_SFCF, 
+     *  the snowfall correction factor.
      * ************/
     if (Tair > P_TT)
     {
@@ -47,9 +54,24 @@ void Routine_snow(
     double P_CWH
 )
 {
+    /******************
+     * The snow routine of the model controls snow accumulation and melt
+     * -- inputs:
+     * Tair: (daily average) air temperature, degree C
+     * Rainfall: rainfall (liquid water) from precipitation partition 
+     * Snowfall: snowfall (solid water)
+     * 
+     * -- parameters:
+     * P_TT: a threshold temperature, degree C. 
+     * P_CFMAX: degree-day factor (mm/C/day), which controls the rate of snowmelt per degree-day, melting capacity
+     * P_CFR: refreezing coefficient, fraction of melted snow that refreezes
+     * ****************/
     double Melt_tmp;
     double Refreeze_tmp;
     
+    // Snowpack_ice: the solid water content of the snow pack
+    // Snowpack_liquid: the liquid water content of the snow pack
+
     // initialize the snowpack states
     *Snowpack_ice_post = Snowpack_ice + Snowfall;
     *Snowpack_liquid_post = Snowpack_liquid + Rainfall;
