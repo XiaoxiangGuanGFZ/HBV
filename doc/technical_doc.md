@@ -47,12 +47,22 @@ where:
 - $P_{CFMAX}$: degree-day factor (mm/C/day)
 - $P_{TT}$: threshold temperature ($^{\circ}C$)
 
+The dynamic process of the snowpack:
+
+
 Meltwater and rainfall (liquid state) are retained within the snowpack until they exceed a certain fraction, $P_{CWH}$ (–), of the water equivalent of the snow, which is usually preset to 10 %. When temperatures drop below $P_{TT}$, the amount of refreezing liquid water within the snowpack, $R$ (mm/d), is computed using a refreezing coefficient, $P_{CFR}$ (–)
 
 $$
 R = P_{CFR} \cdot P_{CFMAX} \cdot (P_{TT} - T(t))
 $$
 
+```code
+# SP_solid: solid water content in the snowpack
+# SP_liquid: liquid water content int the snowpack
+SP_solid(t+1) = SP_solid(t) + Snowfall(t) - Melt(t) + Refreeze(t)
+SP_liquid(t+1)= SP_liquid(t) + Rainfall(t) - Refreeze(t) + Melt(t)
+I = max(0, SP_liquid(t+1) - P_CWH * SP_solid(t+1)) # snowmelt drainage from the snowpack
+```
 
 Thus the snow routine of the HBV model has primarily three free parameters that have to be estimated by calibration: $P_{TT}$, $P_{CFMAX}$ and $P_{CFR}$· lf a separation into vegetation zones is used, the number doubles. It is also common to use separate threshold temperatures for snow accumulation and melt.
 
