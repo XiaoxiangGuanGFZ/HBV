@@ -17,6 +17,7 @@ of water storage. Finally, in the routing routine a triangular
 weighting function is used to simulate the routing of the
 runoff to the catchment outlet.
 
+
 ![HBV_structure](./structure_HBV.png)
 
 
@@ -95,6 +96,8 @@ where:
 - $P_{FC}$: water storage capacity (maximum) of the soil box, mm
 - $P_{LP}$: Wilting Point or Limit for Potential Evapotranspiration, fraction of $P_{FC}$ at which potential evapotranspiration is reduced
 - $E_{act}$: estimated actual evaporation from the soil box, mm
+
+![soil](./soil.png)
 
 ### Runoff generation and routing
 
