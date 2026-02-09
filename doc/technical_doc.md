@@ -97,7 +97,7 @@ where:
 - $P_{LP}$: Wilting Point or Limit for Potential Evapotranspiration, fraction of $P_{FC}$ at which potential evapotranspiration is reduced
 - $E_{act}$: estimated actual evaporation from the soil box, mm
 
-![soil](./soil.png)
+![soil](./Soil.png)
 
 ### Runoff generation and routing
 
