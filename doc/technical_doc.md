@@ -1,5 +1,6 @@
 ## HBV hydrological model
 ### Introduction
+
 The HBV model is a semi-distributed model, which means
 that a catchment can be separated into different elevation
 and vegetation zones as well as into different subcatchments. 
@@ -18,10 +19,12 @@ runoff to the catchment outlet.
 
 ![HBV_structure](./structure_HBV.png)
 
+
 ### Snow routine
 
-The snow routine of the model controls snow accumulation and melt and works separately for each elevation and vegetation zone. Precipitation is considered to be either snow or rain, depending on whether the temperature is above
-or below a threshold temperature ($P_{TT}$). The precipitation accumulates as snow when the air temperature drops below a threshold value ($P_{TT}$). To account for undercatch of snow precipitation and winter evaporation, which is little known, snow accumulation is adjusted by a free parameter, $P_{SFCF}$, the snowfall correction factor.
+The snow routine of the model controls snow accumulation and melt and works separately for each elevation and vegetation zone. Precipitation is considered to be either snow or rain, depending on whether the temperature is above or below a threshold temperature ($P_{TT}$). The precipitation accumulates as snow when the air temperature drops below a threshold value ($P_{TT}$). 
+
+To account for undercatch of snow precipitation and winter evaporation, which is little known, snow accumulation is adjusted by a free parameter, $P_{SFCF}$, the snowfall correction factor.
 
 $$
 P_{rain} = P, T_{air} > P_{TT}
@@ -31,8 +34,6 @@ $$
 P_{snow} = P \cdot P_{SFCF}, T_{air} \leq P_{TT}
 $$
 
-
-The precipitation accumulates as snow when the air temperature drops below a threshold value ($P_{TT}$). To account for undercatch of snow precipitation and winter evaporation, which is little known, snow accumulation is adjusted by a free parameter, $C_{SF}$, the snowfall correction factor.
 
 Melt starts with temperatures above the threshold, $P_{TT}$, according to a simple degree-day expression:
 
@@ -60,9 +61,7 @@ Thus the snow routine of the HBV model has primarily three free parameters that 
 
 The soil moisture accounting routine computes an index of the wetness of the entire basin and integrates interception and soil moisture storage. 
 
-Based on the amount of input to the soil (sum of rainfall and
-snowmelt) at a certain time step, $I(t)$ (mm/d), the flux to the groundwater, $F(t)$ (mm/d), is computed. The remaining part of $P(t)$ is added to the soil box. The partition is a function of the ratio between current water content of the
-soil box ($S_{SOIL}(t)$, mm) and its maximum value ($P_{FC}$, mm). 
+Based on the amount of input to the soil (sum of rainfall and snowmelt) at a certain time step, $I(t)$ (mm/d), the flux to the groundwater, $F(t)$ (mm/d), is computed. The remaining part of $P(t)$ is added to the soil box. The partition is a function of the ratio between current water content of the soil box ($S_{SOIL}(t)$, mm) and its maximum value ($P_{FC}$, mm). 
 
 The actual evaporation $E_{act}$ from the soil box equals the potential evaporation ($E_{pot}$) if $S_{SOIL}(t) / P_{FC}$ is above $P_{LP} / {P_{FC}}$, while a linear reduction is used when $S_{SOIL}(t) / P_{FC}$ is below the value.
 
@@ -76,12 +75,23 @@ E_{act} = E_{pot} \cdot \min(S_{SOIL}(t) / (P_{FC} \cdot P_{LP}), 1)
 $$
 
 
+where:
+
+- $t$: time step
+- $E_{pot}$: potential evapotranspiration, mm/d
+- $I(t)$: water amount input to the soil, mm/d
+- $F(t)$: the water flux to the groundwater, mm/d
+- $S_{SOIL} (t)$: the water content of the soil box at the current time step, mm
+- $P_{FC}$: water storage capacity (maximum) of the soil box, mm
+- $P_{LP}$: Wilting Point or Limit for Potential Evapotranspiration, fraction of $P_{FC}$ at which potential evapotranspiration is reduced
+- $E_{act}$: estimated actual evaporation from the soil box, mm
+
 ### Runoff generation and routing
 
-Groundwater recharge is added to the upper groundwater box ($Z_{SU}$, mm). 
-$P_{PERC}$ (mm/d) defines the maximum percolation rate from the upper to the lower groundwater box ($S_{LZ}$, mm). 
+Groundwater recharge is added to the upper groundwater box ($S_{UZ}$, mm). $P_{PERC}$ (mm/d) defines the maximum percolation rate from the upper to the lower groundwater box ($S_{LZ}$, mm). 
 
-Runoff from the groundwater boxes is computed as the sum of two or three linear outflow equations $P_{K0}$,$P_{K1}$ and $P_{K2}$ ($d^{−1}$), depending on whether $Z_{SU}$ is above a threshold value, $P_{UZL}$ (mm). This runoff is finally transformed by a triangular weighting function defined by the parameter $P_{MAXBAS}$ to give the simulated runoff (mm/d).
+Runoff from the groundwater boxes is computed as the sum of two or three linear outflow equations $P_{K0}$, $P_{K1}$ and $P_{K2}$ ($d^{−1}$), depending on whether $S_{UZ}$ is above a threshold value, $P_{UZL}$ (mm). This runoff is finally transformed by a triangular weighting function defined by the parameter $P_{MAXBAS}$ to give the simulated runoff (mm/d).
+
 
 $$
 Q_{GW}(t) = P_{K2} \cdot S_{LZ} + P_{K1} \cdot S_{UZ} + P_{K0} \cdot \max(S_{UZ} - P_{UZL}, 0)
@@ -91,11 +101,23 @@ $$
 Q_{sim}(t) = \sum_{i=1}^{P_{MAXBAS}}{c(i) \cdot Q_{GW}(t - i + 1)}
 $$
 
-where 
+and 
 
 $$
 c(i) = \int_{i-1}^{i}{2/P_{MAXBAS} - 4 / P_{MAXBAS}^2 \cdot |u - P_{MAXBAS} / 2| \, du}
 $$
+
+
+where:
+
+- $S_{UZ}$: water content in the upper groundwater box, mm
+- $S_{LZ}$: water content in the lower groundwater box, mm
+- $P_{UZL}$: threshold for quick flow in upper groundwater box, mm
+- $P_{K0}$: upper groundwater zone quick flow recession coefficient, [-]
+- $P_{K1}$: upper groundwater zone recession coefficient, [-]
+- $P_{K2}$: lower groundwater zone recession coefficient, [-]
+- $Q_{GW}(t)$: water flux from ground water at the time step $t$, mm/d
+- $Q_{sim}(t)$: simulated final runoff, mm/d
 
 ### Parameters
 
