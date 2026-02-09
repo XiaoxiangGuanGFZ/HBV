@@ -72,53 +72,45 @@ void Routine_snow(
     // Snowpack_ice: the solid water content of the snow pack
     // Snowpack_liquid: the liquid water content of the snow pack
 
-    // initialize the snowpack states
-    *Snowpack_ice_post = Snowpack_ice + Snowfall;
-    *Snowpack_liquid_post = Snowpack_liquid + Rainfall;
-
     if (Tair > P_TT)
     {
-        // air temperature is higher than the threshold
-        if (*Snowpack_ice_post > 0.0)
+        // air temperature is higher than the threshold; solid (ice) snow will melt
+        if (Snowpack_ice > 0.0)
         {
             Melt_tmp = P_CFMAX * (Tair - P_TT);
-            if (Melt_tmp > *Snowpack_ice_post)
+            if (Melt_tmp > Snowpack_ice)
             {
-                *Melt = *Snowpack_ice_post;
-                *Snowpack_ice_post = 0.0;
+                *Melt = Snowpack_ice;
             } else {
                 *Melt = Melt_tmp;
-                *Snowpack_ice_post -= Melt_tmp;
             }
         } else {
             *Melt = 0.0;
         }
         *Refreeze = 0.0;
     } else {
-        // air temperature is lower than the threshold, Tair <= P_TT
-        if (*Snowpack_liquid_post > 0.0)
+        // air temperature is lower than the threshold, Tair <= P_TT, refreezing ... 
+        if (Snowpack_liquid > 0.0)
         {
             Refreeze_tmp = P_CFR * P_CFMAX * (P_TT - Tair);
-            if (Refreeze_tmp > *Snowpack_liquid_post)
+            if (Refreeze_tmp > Snowpack_liquid)
             {
-                *Refreeze = *Snowpack_liquid_post;
-                *Snowpack_liquid_post = 0.0;
+                *Refreeze = Snowpack_liquid;
             } else {
                 *Refreeze = Refreeze_tmp;
-                *Snowpack_liquid_post -= Refreeze_tmp;
             }
         }
         *Melt = 0.0;
     }
     
     // update snowpack state (after the calculation time step)
-    *Snowpack_ice_post += *Refreeze;
-    *Snowpack_liquid_post += *Melt;
-    
-    if (*Snowpack_liquid_post > P_CWH * *Snowpack_ice_post) {
-        // liquid water retaining capacity: P_CWH * *Snowpack_ice_post
-        *I = *Snowpack_liquid_post - P_CWH * *Snowpack_ice_post;
-        *Snowpack_liquid_post = P_CWH * *Snowpack_ice_post;
+    *Snowpack_ice_post = Snowpack_ice + Snowfall + *Refreeze - *Melt;
+    *Snowpack_liquid_post = Snowpack_liquid + Rainfall + *Melt - *Refreeze;
+    double max_liq; // liquid water retaining capacity
+    max_liq = P_CWH * *Snowpack_ice_post; 
+    if (*Snowpack_liquid_post > max_liq) {
+        *I = *Snowpack_liquid_post - max_liq;
+        *Snowpack_liquid_post = max_liq;
     } else {
         *I = 0.0;
     }
