@@ -99,6 +99,29 @@ where:
 
 ![soil](./Soil.png)
 
+water balance in the soil box:
+
+```code
+# I(t): water into the soil box from rainfall and snowmelt
+# F(t): recharge water from soil box into the groundwater
+# SM(t), SM(t+1): soil moisture (water content) at the time step t, and t+1 respectively 
+# I(t) - F(t) >= 0.0, based on the formula
+# P_FC: maximum soil moisture storage, a parameter
+
+DIFF = I(t) - F(t) + SM(t) - Eact(t)
+if (DIFF < 0.0) {
+    # no enough soil water for evaporation
+    SM(t+1) = 0.0
+    Eact(t) = I(t) - F(t) + SM(t)
+} else if (DIFF > P_FC) {
+    # soil box is full, excess water directly goes to groundwater
+    SM(t+1) = P_FC
+    F(t) = F(t) + (DIFF - P_FC)
+} else {
+    SM(t+1) = DIFF
+}
+```
+
 ### Runoff generation and routing
 
 Groundwater recharge is added to the upper groundwater box ($S_{UZ}$, mm). $P_{PERC}$ (mm/d) defines the maximum percolation rate from the upper to the lower groundwater box ($S_{LZ}$, mm). 
@@ -153,7 +176,7 @@ where:
 
 ### Others
 
-The long-term mean values of the potential evaporation, $E_{POT,M}(t)$, for a certain day of the year are corrected to its value at day $t$, $E_{POT}(t)$, by using the deviations of the temperature, $T(t)$, at a certain day, from its long-term mean, $T_{M}$, and a correction factor, $P_{CET}$ (C−1).
+The long-term mean values of the potential evaporation, $E_{POT,M}(t)$, for a certain day of the year are corrected to its value at day $t$, $E_{POT}(t)$, by using the deviations of the temperature, $T(t)$, at a certain day, from its long-term mean, $T_{M}$, and a correction factor, $P_{CET}$.
 
 $$
 E_{POT}(t) = (1 + P_{CET} \cdot (T(t) - T_{M})) \cdot E_{POT,M}
