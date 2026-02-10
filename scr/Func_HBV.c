@@ -4,6 +4,7 @@
 #include "Func_HBV.h"
 #include "Func_Snow.h"
 #include "Func_Soil.h"
+#include "Func_Groundwater.h"
 #include "Func_Routing.h"
 
 void HBV(

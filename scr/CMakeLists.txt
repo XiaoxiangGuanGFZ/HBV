@@ -8,6 +8,7 @@ set(SOURCE_FILES
     main.c
     Func_Snow.c
     Func_Soil.c
+    Func_Groundwater.c
     Func_Routing.c
     Func_dataIO.c
     Func_OutPrint.c
