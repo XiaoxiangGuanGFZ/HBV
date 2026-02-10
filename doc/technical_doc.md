@@ -1,25 +1,9 @@
 ## HBV hydrological model
 ### Introduction
 
-The HBV model is a semi-distributed model, which means
-that a catchment can be separated into different elevation
-and vegetation zones as well as into different subcatchments. 
-The model consists of different routines and simulates
-catchment discharge, usually on a daily time step,
-based on time series of precipitation and air temperature
-as well as estimates of monthly long-term potential evaporation
-rates. In the snow routine snow accumulation and
-snowmelt are computed by a degree-day method. In the soil
-routine groundwater recharge and actual evaporation are simulated
-as functions of actual water storage. In the response
-(or groundwater) routine, runoff is computed as a function
-of water storage. Finally, in the routing routine a triangular
-weighting function is used to simulate the routing of the
-runoff to the catchment outlet.
-
+The HBV model is a semi-distributed model, which means that a catchment can be separated into different elevation and vegetation zones as well as into different subcatchments. The model consists of different routines and simulates catchment discharge, usually on a daily time step, based on time series of precipitation and air temperature as well as estimates of monthly long-term potential evaporation rates. In the snow routine snow accumulation and snowmelt are computed by a degree-day method. In the soil routine groundwater recharge and actual evaporation are simulated as functions of actual water storage. In the response (or groundwater) routine, runoff is computed as a function of water storage. Finally, in the routing routine a triangular weighting function is used to simulate the routing of the runoff to the catchment outlet.
 
 ![HBV_structure](./structure_HBV.png)
-
 
 ### Snow routine
 
