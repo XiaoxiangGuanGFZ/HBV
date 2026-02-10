@@ -124,7 +124,7 @@ if (DIFF < 0.0) {
 
 ### Runoff generation and routing
 
-Groundwater recharge is added to the upper groundwater box ($S_{UZ}$, mm). $P_{PERC}$ (mm/d) defines the maximum percolation rate from the upper to the lower groundwater box ($S_{LZ}$, mm). 
+Groundwater recharge $F(t)$ is added to the upper groundwater box ($S_{UZ}$, mm). $P_{PERC}$ (mm/d) defines the maximum percolation rate from the upper to the lower groundwater box ($S_{LZ}$, mm). 
 
 Runoff from the groundwater boxes is computed as the sum of two or three linear outflow equations $P_{K0}$, $P_{K1}$ and $P_{K2}$ ($d^{−1}$), depending on whether $S_{UZ}$ is above a threshold value, $P_{UZL}$ (mm). This runoff is finally transformed by a triangular weighting function defined by the parameter $P_{MAXBAS}$ to give the simulated runoff (mm/d).
 
@@ -154,6 +154,34 @@ where:
 - $P_{K2}$: lower groundwater zone recession coefficient, [-]
 - $Q_{GW}(t)$: water flux from ground water at the time step $t$, mm/d
 - $Q_{sim}(t)$: simulated final runoff, mm/d
+
+water dynamics in the groundwater boxes:
+
+```code
+if (S_UZ > P_UZL) {
+    QGW0 = P_K0 * (S_UZ - P_UZL + F);
+    S_UZ_afterQ0 = (1/P_K0 - 1) * QGW0 + P_UZL;
+} else {
+    QGW0 = 0.0;
+    S_UZ_afterQ0 = S_UZ + F;
+}
+// ensures: S_UZ_afterQ0 + QGW0 = S_UZ + F
+if (S_UZ_afterQ0 >= P_PERC){
+    UpLow = P_PERC;
+    QGW1 = P_K1 * (S_UZ_afterQ0 - UpLow);
+    S_UZ_afterQ1 = (1 / P_K1 - 1) * QGW1;
+} else {
+    UpLow = S_UZ_afterQ0;
+    QGW1 = 0.0;
+    S_UZ_afterQ1 = 0.0;
+}
+// ensures: S_UZ_afterQ1 + QGW1 + UpLow = S_UZ_afterQ0
+QGW2 = P_K2 * (S_LZ + UpLow);
+S_LZ_post = (1 / P_K2 - 1) * QGW2;
+// ensures: S_LZ_post + QGW2 = S_LZ + UpLow;
+S_UZ_post = S_UZ_afterQ1;
+QGW = QGW0 + QGW1 + QGW2;
+```
 
 ### Parameters
 
